@@ -3,7 +3,7 @@
 Terraform Module to provision an ElasticSearch cluster and dependent resources.
 
  ---
- 
+
  ## Architectural Decision Records
 
 Important architectural decisions along with their context and consequences are
@@ -16,7 +16,7 @@ href="https://github.com/npryce/adr-tools">ADR Tools</a>. Instructions for
 installing the tools can be found <a
 href="https://github.com/npryce/adr-tools/blob/master/INSTALL.md">here</a>.
 
-Please read the [ADRs](docs/architecture/decisions/README.md) for this module to
+Please read the [ADRs](docs/adr/toc.md) for this module to
 understand the important architectural decisions that have been made.
 
 ## License
