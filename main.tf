@@ -55,6 +55,13 @@ resource "aws_elasticsearch_domain" "this" {
     }
   }
 
+  ebs_options {
+    ebs_enabled = var.es_ebs_volume_size > 0 ? true : false
+    volume_size = var.es_ebs_volume_size
+    volume_type = var.es_ebs_volume_type
+    iops        = var.es_ebs_iops
+  }
+
   vpc_options {
     subnet_ids         = data.aws_subnet_ids.this[0].ids
     security_group_ids = [aws_security_group.es_vpc[0].id]

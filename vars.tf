@@ -69,6 +69,24 @@ variable "es_az_count" {
   default = 1
 }
 
+variable "es_ebs_volume_size" {
+  type = number
+  description = "The size of EBS volumes attached to data nodes (in GiB). EBS volumes are attached to data nodes in the domain when this value is > `0`."
+  default = 0
+}
+
+variable "es_ebs_volume_type" {
+  type = string
+  description = "The type of EBS volumes attached to data nodes."
+  default = "gp2"
+}
+
+variable "es_ebs_iops" {
+  type = number
+  description = "The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the Provisioned IOPS EBS volume type."
+  default = 0
+}
+
 variable "es_encryption_enabled" {
   type = bool
   description = "Enables encryption (at rest) for data in theElasticSearch domain. Requires `kms_key` or `kms_key_auto_create` variables"
