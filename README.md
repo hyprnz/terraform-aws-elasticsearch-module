@@ -1,6 +1,6 @@
 # terraform-aws-elasticsearch-module
 
-Terraform Module to provision an ElasticSearch cluster and dependent resources.
+A Terraform module to provision an ElasticSearch cluster and dependent resources. Has been tested with Terraform 12.26, but should support Terraform 13 and above. This module does not create the service linked role required to provision an ES Domain within a VPC. Further context can be found in the [ADR](docs/adr/0003-provisoning-service-link-role-is-outside-the-scope-of-this-module.md).
 
  ---
 
@@ -18,6 +18,73 @@ href="https://github.com/npryce/adr-tools/blob/master/INSTALL.md">here</a>.
 
 Please read the [ADRs](docs/adr/toc.md) for this module to
 understand the important architectural decisions that have been made.
+
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.26 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | >= 3.21.0 |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| automated\_snapshot\_start\_hour | The hour(`UTC`) when snapshots are taken | `number` | `12` | no |
+| enabled | Set to false to prevent the module from creating any resources | `bool` | n/a | yes |
+| enforce\_https\_for\_es\_domain\_endpoint | Controls if the Elastic Search Domain endpoint is restricted to https only. Defaults to `true` | `bool` | `true` | no |
+| es\_advanced\_options | Advanced configuration options in JSON format | `map(any)` | `null` | no |
+| es\_az\_aware | Controls if the ElasticSeach domain should be AZ aware | `bool` | `true` | no |
+| es\_az\_count | The number of AZ's to use in theElasticSearch domain cluster. Not applied if `use_all_azs_in_region` is `true`. | `number` | `1` | no |
+| es\_data\_node\_count | The number of data nodes for the ElasticSearch Domain. | `number` | `3` | no |
+| es\_data\_node\_instance\_type | The instance type for the ElasticSearch data nodes | `string` | `"t3.small.elasticsearch"` | no |
+| es\_dedicated\_node\_count | The number of dedicated nodes for the ElasticSearch Domain. | `number` | `1` | no |
+| es\_dedicated\_node\_enabled | Determines if the cluster should provision dedicated cluster nodes. | `bool` | `false` | no |
+| es\_dedicated\_node\_instance\_type | The instance type for the ElasticSearch dedicated nodes | `string` | `"t3.small.elasticsearch"` | no |
+| es\_domain | Name for the Elastic Search Domain.  must start with a alphabet and be at least 3 and no more than 28 characters long. | `string` | `null` | no |
+| es\_ebs\_iops | The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the Provisioned IOPS EBS volume type. | `number` | `0` | no |
+| es\_ebs\_volume\_size | The size of EBS volumes attached to data nodes (in GiB). EBS volumes are attached to data nodes in the domain when this value is > `0`. | `number` | `0` | no |
+| es\_ebs\_volume\_type | The type of EBS volumes attached to data nodes. | `string` | `"gp2"` | no |
+| es\_encryption\_enabled | Enables encryption (at rest) for data in the ElasticSearch domain. Creates own KMS key for use in the ES Domain and Cloudwatch Log Groups | `bool` | `true` | no |
+| es\_internal\_user\_database\_enabled | Whether the internal user database is enabled. Defaults to `false` | `bool` | `false` | no |
+| es\_master\_user\_arn | ARN for the master user. Has no effect if `es_internal_user_database_enabled` is set to `true` | `string` | `null` | no |
+| es\_master\_user\_name | The master user's username, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `es_internal_user_database_enabled` is set to `true` | `string` | `null` | no |
+| es\_master\_user\_password | The master user's password, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `es_internal_user_database_enabled` is set to `true` | `string` | `null` | no |
+| es\_version | The version of Elasticsearch to provision | `string` | `"7.9"` | no |
+| iam\_actions | List of policy actions given that defines access the ES Domain | `list(string)` | `[]` | no |
+| iam\_role\_arns | A List of Role ARNs that provides access to the ES Domain | `list(string)` | `[]` | no |
+| log\_audit\_enabled | Enables the `AUDIT_LOGS` to CloudWatch | `bool` | `true` | no |
+| log\_es\_app\_enabled | Enables the `ES_APPLICATION_LOGS` to CloudWatch | `bool` | `true` | no |
+| log\_index\_slow\_enabled | Enables the `INDEX_SLOW_LOGS` to CloudWatch | `bool` | `true` | no |
+| log\_publishing\_rentention\_in\_days | Controls the rentation period in days the CloudWatch Log Group applies to published logs | `number` | `30` | no |
+| log\_search\_slow\_enabled | Enables the `SEARCH_SLOW_LOGS` to CloudWatch | `bool` | `true` | no |
+| security\_groups\_ingress\_source | List of security Group IDs allowed access to the cluster | `list(string)` | `[]` | no |
+| tags | Tags to apply to all resources | `map(any)` | `{}` | no |
+| tls\_security\_policy\_for\_es\_domain\_endpoint | The name of the TLS security policy that needs to be applied to the HTTPS endpoint. Valid values: `Policy-Min-TLS-1-0-2019-07`(default) and `Policy-Min-TLS-1-2-2019-07`. | `string` | `"Policy-Min-TLS-1-0-2019-07"` | no |
+| use\_all\_azs\_in\_region | Defaults to use all availabile Availability Zones in the Region. Takes prescendence over `es_az_count`. | `bool` | `true` | no |
+| vpc\_name | The Name of the vpc to install the ElasticSearch domain | `string` | `null` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| es\_cloudwatch\_log\_group\_arn | The ARN of the Cloudwatch Log Group where ES Domain cluster logs are published |
+| es\_cloudwatch\_log\_group\_name | The Name of the Cloudwatch Log Group where ES Domain cluster logs are published |
+| es\_domain\_arn | The ARN of the Elastic Search domain. |
+| es\_domain\_id | Unique identifier for the Elastic Search domain |
+| es\_domain\_name | The name of the Elasticsearch domain |
+| es\_endpoint | Domain-specific endpoint used to submit index, search, and data upload requests |
+| es\_kibana\_endpoint | The Elastic Search Domain-specific endpoint for Kibana |
+| es\_kms\_key\_arn | The ARN of the key used to encrypt data at rest |
+| es\_kms\_key\_id | The globally unique identifier for the key used to encrypt data at rest |
+| es\_vpc\_security\_group\_arn | The ARN of the security group configured for the Elastic Search Domain |
+| es\_vpc\_security\_group\_id | The ID of the security group configured for the Elastic Search Domain |
+| es\_vpc\_security\_group\_name | The Name of the security group configured for the Elastic Search Domain |
 
 ## License
 

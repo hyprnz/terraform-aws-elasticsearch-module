@@ -88,27 +88,27 @@ variable "es_ebs_iops" {
 }
 
 variable "es_internal_user_database_enabled" {
-  type = bool
+  type        = bool
   description = "Whether the internal user database is enabled. Defaults to `false`"
-  default = false
+  default     = false
 }
 
 variable "es_master_user_arn" {
-  type = string
+  type        = string
   description = "ARN for the master user. Has no effect if `es_internal_user_database_enabled` is set to `true`"
-  default = null
+  default     = null
 }
 
 variable "es_master_user_name" {
-  type = string
+  type        = string
   description = "The master user's username, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `es_internal_user_database_enabled` is set to `true`"
-  default = null
+  default     = null
 }
 
 variable "es_master_user_password" {
-  type = string
+  type        = string
   description = " The master user's password, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `es_internal_user_database_enabled` is set to `true`"
-  default = null
+  default     = null
 }
 
 variable "es_encryption_enabled" {
@@ -124,69 +124,69 @@ variable "es_advanced_options" {
 }
 
 variable "security_groups_ingress_source" {
-  type = list(string)
+  type        = list(string)
   description = "List of security Group IDs allowed access to the cluster"
-  default = []
+  default     = []
 }
 
 variable "automated_snapshot_start_hour" {
-  type = number
+  type        = number
   description = "The hour(`UTC`) when snapshots are taken"
-  default = 12
+  default     = 12
 }
 
 variable "enforce_https_for_es_domain_endpoint" {
-  type = bool
+  type        = bool
   description = "Controls if the Elastic Search Domain endpoint is restricted to https only. Defaults to `true`"
-  default = true
+  default     = true
 }
 
 variable "tls_security_policy_for_es_domain_endpoint" {
-  type = string
+  type        = string
   description = "The name of the TLS security policy that needs to be applied to the HTTPS endpoint. Valid values: `Policy-Min-TLS-1-0-2019-07`(default) and `Policy-Min-TLS-1-2-2019-07`. "
-  default = "Policy-Min-TLS-1-0-2019-07"
+  default     = "Policy-Min-TLS-1-0-2019-07"
 }
 
 variable "iam_role_arns" {
-  type = list(string)
+  type        = list(string)
   description = "A List of Role ARNs that provides access to the ES Domain"
-  default = []
+  default     = []
 }
 
 variable "iam_actions" {
-  type = list(string)
+  type        = list(string)
   description = "List of policy actions given that defines access the ES Domain"
-  default = []
+  default     = []
 }
 
 variable "log_index_slow_enabled" {
-  type = bool
+  type        = bool
   description = "Enables the `INDEX_SLOW_LOGS` to CloudWatch"
-  default = true
+  default     = true
 }
 
 variable "log_search_slow_enabled" {
-  type = bool
+  type        = bool
   description = "Enables the `SEARCH_SLOW_LOGS` to CloudWatch"
-  default = true
+  default     = true
 }
 
 variable "log_es_app_enabled" {
-  type = bool
+  type        = bool
   description = "Enables the `ES_APPLICATION_LOGS` to CloudWatch"
-  default = true
+  default     = true
 }
 
 variable "log_audit_enabled" {
-  type = bool
+  type        = bool
   description = "Enables the `AUDIT_LOGS` to CloudWatch"
-  default = true
+  default     = true
 }
 
 variable "log_publishing_rentention_in_days" {
-  type = number
+  type        = number
   description = "Controls the rentation period in days the CloudWatch Log Group applies to published logs"
-  default = 30
+  default     = 30
 }
 variable "tags" {
   type        = map(any)

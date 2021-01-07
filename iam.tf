@@ -28,9 +28,9 @@ data "aws_iam_policy_document" "es_log_group_access_policy" {
       "logs:PutLogEvents",
       "logs:PutLogEventsBatch",
       "logs:CreateLogStream"
-      ]
+    ]
 
-    resources = [ "arn:aws:logs:*"]
+    resources = ["arn:aws:logs:*"]
 
     principals {
       type        = "Service"

@@ -1,6 +1,3 @@
-# IAM role
-# CW Logs
-
 locals {
   az_count = var.use_all_azs_in_region ? length(data.aws_availability_zones.available.names) : var.es_az_count
 
@@ -55,7 +52,7 @@ resource "aws_elasticsearch_domain" "this" {
 
   vpc_options {
     subnet_ids         = data.aws_subnet_ids.this[0].ids
-    security_group_ids = [aws_security_group.this[0].id]
+    security_group_ids = [aws_security_group.es_domain[0].id]
   }
 
   domain_endpoint_options {

@@ -1,6 +1,6 @@
 # Used to provision the ServiceLink Role before the module
 resource "aws_iam_service_linked_role" "this" {
-  count            = 1
+  count            = 0
   aws_service_name = "es.amazonaws.com"
   description      = "AWSServiceRoleForAmazonElasticsearchService Service-Linked Role"
 }
