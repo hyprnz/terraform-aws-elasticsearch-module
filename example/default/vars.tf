@@ -1,4 +1,4 @@
-variable "es_domain" {
+variable "es_domain_name" {
   type        = string
   description = "Name for the Elastic Search Domain"
   default     = null

@@ -1,10 +1,10 @@
 resource "aws_security_group" "es_domain" {
   count       = var.enabled && var.es_vpc_enabled ? 1 : 0
-  name        = var.es_domain
-  description = "ElasticSearch Domain for ${var.es_domain}"
+  name        = var.es_domain_name
+  description = "ElasticSearch Domain for ${var.es_domain_name}"
   vpc_id      = var.es_vpc_id
   tags = merge({
-    "Name" = var.es_domain
+    "Name" = var.es_domain_name
     },
     local.default_tags, var.tags
   )

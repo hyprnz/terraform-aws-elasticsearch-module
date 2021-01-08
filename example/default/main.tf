@@ -12,7 +12,7 @@ module "example" {
   }
 
   enabled                        = true
-  es_domain                      = var.es_domain
+  es_domain_name                 = var.es_domain_name
   es_vpc_id                      = var.es_vpc_id
   es_subnet_ids                  = var.es_subnet_ids
   allowed_cdir_blocks            = var.allowed_cdir_blocks

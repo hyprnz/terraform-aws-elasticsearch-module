@@ -6,13 +6,13 @@ locals {
   default_tags = {
     "Managed By"     = "Terraform",
     "Module"         = "terraform-aws-elasticsearch-module",
-    "Resource Group" = "Elasticsearch Cluster ${format("%v", var.es_domain)}"
+    "Resource Group" = "Elasticsearch Cluster ${format("%v", var.es_domain_name)}"
   }
 }
 
 resource "aws_elasticsearch_domain" "this" {
   count                 = var.enabled ? 1 : 0
-  domain_name           = var.es_domain
+  domain_name           = var.es_domain_name
   elasticsearch_version = var.es_version
 
   cluster_config {
@@ -104,7 +104,7 @@ resource "aws_elasticsearch_domain" "this" {
   }
 
   tags = merge({
-    Name = var.es_domain
+    Name = var.es_domain_name
     },
     local.default_tags, var.tags
   )

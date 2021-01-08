@@ -3,9 +3,9 @@ variable "enabled" {
   description = "Set to false to prevent the module from creating any resources"
 }
 
-variable "es_domain" {
+variable "es_domain_name" {
   type        = string
-  description = "Name for the Elastic Search Domain.  must start with a alphabet and be at least 3 and no more than 28 characters long."
+  description = "Name for the Elastic Search Domain.  Must start with a alphabet and be at least 3 and no more than 28 characters long."
   default     = null
 }
 
