@@ -4,10 +4,22 @@ variable "es_domain" {
   default     = null
 }
 
-variable "vpc_name" {
+variable "es_vpc_id" {
   type        = string
-  description = "The Name of the vpc to install the ElasticSearch domain"
-  default     = null
+  description = "The ID of the VPC to configure the ElasticSearch domain with"
+  default     = ""
+}
+
+variable "es_subnet_ids" {
+  type        = list(string)
+  description = "A List of subnet ids to associate with the ElasticSearch domain."
+  default     = []
+}
+
+variable "allowed_cdir_blocks" {
+  type        = list(string)
+  description = "A List of cdir blocks to assign to the VCP security group"
+  default     = []
 }
 
 variable "iam_role_arns" {

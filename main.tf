@@ -26,7 +26,7 @@ resource "aws_elasticsearch_domain" "this" {
     zone_awareness_enabled = var.es_az_aware
 
     dynamic "zone_awareness_config" {
-      for_each = var.es_az_aware && local.az_count > 1 ? [true] : []
+      for_each = var.es_az_aware && (local.az_count > 1) ? [true] : []
       content {
         availability_zone_count = local.az_count
       }
@@ -50,9 +50,13 @@ resource "aws_elasticsearch_domain" "this" {
     iops        = var.es_ebs_iops
   }
 
-  vpc_options {
-    subnet_ids         = data.aws_subnet_ids.this[0].ids
-    security_group_ids = [aws_security_group.es_domain[0].id]
+  dynamic "vpc_options" {
+    for_each = var.es_vpc_enabled ? [true] : []
+
+    content {
+      security_group_ids = [aws_security_group.es_domain[0].id]
+      subnet_ids         = var.es_subnet_ids
+    }
   }
 
   domain_endpoint_options {

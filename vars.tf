@@ -9,12 +9,6 @@ variable "es_domain" {
   default     = null
 }
 
-variable "vpc_name" {
-  type        = string
-  description = "The Name of the vpc to install the ElasticSearch domain"
-  default     = null
-}
-
 variable "es_version" {
   type        = string
   description = "The version of Elasticsearch to provision"
@@ -49,6 +43,30 @@ variable "es_dedicated_node_count" {
   type        = number
   description = "The number of dedicated nodes for the ElasticSearch Domain."
   default     = 1
+}
+
+variable "es_vpc_enabled" {
+  type        = bool
+  description = "Controls if the ElasticSearch Domain should bind to a VPC. If `false` cluster is provisioned outside a VPC"
+  default     = true
+}
+
+variable "es_vpc_id" {
+  type        = string
+  description = "The ID of the VPC to configure the ElasticSearch domain with"
+  default     = ""
+}
+
+variable "es_subnet_ids" {
+  type        = list(string)
+  description = "A List of subnet ids to associate with the ElasticSearch domain."
+  default     = []
+}
+
+variable "allowed_cdir_blocks" {
+  type        = list(string)
+  description = "A List of cdir blocks to assign to the VCP security group"
+  default     = []
 }
 
 variable "use_all_azs_in_region" {
