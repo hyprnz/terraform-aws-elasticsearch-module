@@ -34,7 +34,7 @@ resource "aws_elasticsearch_domain" "this" {
   }
 
   advanced_security_options {
-    enabled                        = true
+    enabled                        = var.es_advanced_security_options_enabled
     internal_user_database_enabled = var.es_internal_user_database_enabled
     master_user_options {
       master_user_arn      = var.es_master_user_arn
@@ -98,7 +98,7 @@ resource "aws_elasticsearch_domain" "this" {
   }
 
   log_publishing_options {
-    enabled                  = var.log_audit_enabled
+    enabled                  = var.es_advanced_security_options_enabled ? var.log_audit_enabled : false
     log_type                 = "AUDIT_LOGS"
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.es_domain[0].arn
   }

@@ -1,19 +1,23 @@
 data "aws_iam_policy_document" "es_access_policy" {
   count = var.enabled ? 1 : 0
 
-  statement {
-    effect = "Allow"
+  dynamic "statement" {
+    for_each = var.es_access_policy_statements
+    content {
+      effect = "Allow"
 
-    actions = var.iam_actions
+      sid = statement.value.name
 
-    resources = [
-      aws_elasticsearch_domain.this[0].arn,
-      format("%s/*", aws_elasticsearch_domain.this[0].arn)
-    ]
+      actions = statement.value.actions
 
-    principals {
-      type        = "AWS"
-      identifiers = var.iam_role_arns
+      resources = [
+        format("%s/%s", aws_elasticsearch_domain.this[0].arn, statement.value.resource_path)
+      ]
+
+      principals {
+        type        = "AWS"
+        identifiers = [statement.value.role]
+      }
     }
   }
 }

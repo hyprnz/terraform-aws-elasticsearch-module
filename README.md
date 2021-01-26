@@ -35,10 +35,13 @@ understand the important architectural decisions that have been made.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| allowed\_cdir\_blocks | A List of cdir blocks to assign to the VCP security group | `list(string)` | `[]` | no |
 | automated\_snapshot\_start\_hour | The hour(`UTC`) when snapshots are taken | `number` | `12` | no |
 | enabled | Set to false to prevent the module from creating any resources | `bool` | n/a | yes |
 | enforce\_https\_for\_es\_domain\_endpoint | Controls if the Elastic Search Domain endpoint is restricted to https only. Defaults to `true` | `bool` | `true` | no |
+| es\_access\_policy\_statements | A list of IAM settings that build a number of IAM policy statements, that define the access policy for the cluster | <pre>list(object({<br>    name          = string<br>    actions       = list(string)<br>    resource_path = string<br>    role          = string<br>  }))</pre> | `null` | no |
 | es\_advanced\_options | Advanced configuration options in JSON format | `map(any)` | `null` | no |
+| es\_advanced\_security\_options\_enabled | Enables Fine Grained Access Control within the ElasticSearch domain. This will require a management process to map IAM roles to ElasticSearch principals | `bool` | `true` | no |
 | es\_az\_aware | Controls if the ElasticSeach domain should be AZ aware | `bool` | `true` | no |
 | es\_az\_count | The number of AZ's to use in theElasticSearch domain cluster. Not applied if `use_all_azs_in_region` is `true`. | `number` | `1` | no |
 | es\_data\_node\_count | The number of data nodes for the ElasticSearch Domain. | `number` | `3` | no |
@@ -46,7 +49,7 @@ understand the important architectural decisions that have been made.
 | es\_dedicated\_node\_count | The number of dedicated nodes for the ElasticSearch Domain. | `number` | `1` | no |
 | es\_dedicated\_node\_enabled | Determines if the cluster should provision dedicated cluster nodes. | `bool` | `false` | no |
 | es\_dedicated\_node\_instance\_type | The instance type for the ElasticSearch dedicated nodes | `string` | `"t3.small.elasticsearch"` | no |
-| es\_domain | Name for the Elastic Search Domain.  must start with a alphabet and be at least 3 and no more than 28 characters long. | `string` | `null` | no |
+| es\_domain\_name | Name for the Elastic Search Domain.  Must start with a alphabet and be at least 3 and no more than 28 characters long. | `string` | `null` | no |
 | es\_ebs\_iops | The baseline input/output (I/O) performance of EBS volumes attached to data nodes. Applicable only for the Provisioned IOPS EBS volume type. | `number` | `0` | no |
 | es\_ebs\_volume\_size | The size of EBS volumes attached to data nodes (in GiB). EBS volumes are attached to data nodes in the domain when this value is > `0`. | `number` | `0` | no |
 | es\_ebs\_volume\_type | The type of EBS volumes attached to data nodes. | `string` | `"gp2"` | no |
@@ -55,10 +58,11 @@ understand the important architectural decisions that have been made.
 | es\_master\_user\_arn | ARN for the master user. Has no effect if `es_internal_user_database_enabled` is set to `true` | `string` | `null` | no |
 | es\_master\_user\_name | The master user's username, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `es_internal_user_database_enabled` is set to `true` | `string` | `null` | no |
 | es\_master\_user\_password | The master user's password, which is stored in the Amazon Elasticsearch Service domain's internal database. Only specify if `es_internal_user_database_enabled` is set to `true` | `string` | `null` | no |
+| es\_subnet\_ids | A List of subnet ids to associate with the ElasticSearch domain. | `list(string)` | `[]` | no |
 | es\_version | The version of Elasticsearch to provision | `string` | `"7.9"` | no |
-| iam\_actions | List of policy actions given that defines access the ES Domain | `list(string)` | `[]` | no |
-| iam\_role\_arns | A List of Role ARNs that provides access to the ES Domain | `list(string)` | `[]` | no |
-| log\_audit\_enabled | Enables the `AUDIT_LOGS` to CloudWatch | `bool` | `true` | no |
+| es\_vpc\_enabled | Controls if the ElasticSearch Domain should bind to a VPC. If `false` cluster is provisioned outside a VPC | `bool` | `true` | no |
+| es\_vpc\_id | The ID of the VPC to configure the ElasticSearch domain with | `string` | `""` | no |
+| log\_audit\_enabled | Enables the `AUDIT_LOGS` to CloudWatch. Requires `es_advanced_security_options_enabled` to be enabled | `bool` | `true` | no |
 | log\_es\_app\_enabled | Enables the `ES_APPLICATION_LOGS` to CloudWatch | `bool` | `true` | no |
 | log\_index\_slow\_enabled | Enables the `INDEX_SLOW_LOGS` to CloudWatch | `bool` | `true` | no |
 | log\_publishing\_rentention\_in\_days | Controls the rentation period in days the CloudWatch Log Group applies to published logs | `number` | `30` | no |
@@ -67,7 +71,6 @@ understand the important architectural decisions that have been made.
 | tags | Tags to apply to all resources | `map(any)` | `{}` | no |
 | tls\_security\_policy\_for\_es\_domain\_endpoint | The name of the TLS security policy that needs to be applied to the HTTPS endpoint. Valid values: `Policy-Min-TLS-1-0-2019-07`(default) and `Policy-Min-TLS-1-2-2019-07`. | `string` | `"Policy-Min-TLS-1-0-2019-07"` | no |
 | use\_all\_azs\_in\_region | Defaults to use all availabile Availability Zones in the Region. Takes prescendence over `es_az_count`. | `bool` | `true` | no |
-| vpc\_name | The Name of the vpc to install the ElasticSearch domain | `string` | `null` | no |
 
 ## Outputs
 

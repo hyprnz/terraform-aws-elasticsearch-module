@@ -105,6 +105,12 @@ variable "es_ebs_iops" {
   default     = 0
 }
 
+variable "es_advanced_security_options_enabled" {
+  type        = bool
+  description = "Enables Fine Grained Access Control within the ElasticSearch domain. This will require a management process to map IAM roles to ElasticSearch principals"
+  default     = true
+}
+
 variable "es_internal_user_database_enabled" {
   type        = bool
   description = "Whether the internal user database is enabled. Defaults to `false`"
@@ -165,16 +171,15 @@ variable "tls_security_policy_for_es_domain_endpoint" {
   default     = "Policy-Min-TLS-1-0-2019-07"
 }
 
-variable "iam_role_arns" {
-  type        = list(string)
-  description = "A List of Role ARNs that provides access to the ES Domain"
-  default     = []
-}
-
-variable "iam_actions" {
-  type        = list(string)
-  description = "List of policy actions given that defines access the ES Domain"
-  default     = []
+variable "es_access_policy_statements" {
+  type = list(object({
+    name          = string
+    actions       = list(string)
+    resource_path = string
+    role          = string
+  }))
+  description = "A list of IAM settings that build a number of IAM policy statements, that define the access policy for the cluster"
+  default     = null
 }
 
 variable "log_index_slow_enabled" {
@@ -197,7 +202,7 @@ variable "log_es_app_enabled" {
 
 variable "log_audit_enabled" {
   type        = bool
-  description = "Enables the `AUDIT_LOGS` to CloudWatch"
+  description = "Enables the `AUDIT_LOGS` to CloudWatch. Requires `es_advanced_security_options_enabled` to be `true`"
   default     = true
 }
 
