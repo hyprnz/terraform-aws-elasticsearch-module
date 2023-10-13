@@ -1,5 +1,7 @@
 # terraform-aws-elasticsearch-module
 
+**This module is no longer being maintained** <br/>
+
 A Terraform module to provision an ElasticSearch cluster and dependent resources. Has been tested with Terraform 12.26, but should support Terraform 13 and above. This module does not create the service linked role required to provision an ES Domain within a VPC. Further context can be found in the [ADR](docs/adr/0003-provisoning-service-link-role-is-outside-the-scope-of-this-module.md).
 
  ---
